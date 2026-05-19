@@ -21,7 +21,7 @@ const SignUpPage = () => {
 
   if (data) {
     toast.success("Account created successfully!");
-    redirect("/");
+    redirect("/login");
   }
 
   if (error) {
