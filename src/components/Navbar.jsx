@@ -56,7 +56,7 @@ const Navbar = () => {
 
           {user && (
             <>
-              <li><Link href="/add-tutors">Add Tutors</Link></li>
+              <li><Link href="/add-tutor">Add Tutors</Link></li>
               <li><Link href="/my-tutors">My Tutors</Link></li>
               <li><Link href="/booked-sessions">My Booked Sessions</Link></li>
             </>
@@ -154,7 +154,7 @@ const Navbar = () => {
             {user && (
               <>
                 <li>
-                  <Link href="/add-tutors" onClick={() => setOpen(false)}>Add Tutors</Link>
+                  <Link href="/add-tutor" onClick={() => setOpen(false)}>Add Tutors</Link>
                 </li>
                 <li>
                   <Link href="/my-tutors" onClick={() => setOpen(false)}>My Tutors</Link>
