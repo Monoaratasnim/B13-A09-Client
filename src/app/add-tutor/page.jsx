@@ -5,91 +5,67 @@ import toast from "react-hot-toast";
 
 export default function AddTutorPage() {
 
-  // submit function
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     const form = e.target;
 
     const tutorData = {
-
       tutorName: form.tutorName.value,
-
       photo: form.photo.value,
-
       subject: form.subject.value,
-
       availability: form.availability.value,
-
       hourlyFee: Number(form.hourlyFee.value),
-
       totalSlot: Number(form.totalSlot.value),
-
       sessionStartDate: form.sessionStartDate.value,
-
       institution: form.institution.value,
-
       experience: form.experience.value,
-
       location: form.location.value,
-
       teachingMode: form.teachingMode.value,
-
       createdAt: new Date(),
     };
 
     try {
-
       const res = await axios.post(
         "http://localhost:5000/tutor",
         tutorData
       );
 
       if (res.data.insertedId) {
-
         toast.success("Tutor Added Successfully");
-
         form.reset();
       }
-
     } catch (error) {
-
       console.log(error);
-
       toast.error("Something went wrong");
     }
   };
 
   return (
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-950 py-10 px-4 transition">
 
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-800 p-6 md:p-10 transition">
 
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10">
-
-        {/* Heading */}
-        <div className="mb-8 text-center">
-
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+        {/* HEADER */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400">
             Add Tutor
           </h1>
 
-          <p className="text-gray-500 mt-2 text-sm md:text-base">
-            Create your tutor profile and start teaching students.
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Create your tutor profile and start teaching students
           </p>
-
         </div>
 
-        {/* Form */}
+        {/* FORM */}
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-5"
         >
 
-          {/* Tutor Name */}
+          {/* TUTOR NAME */}
           <div>
-
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Tutor Name
             </label>
 
@@ -98,107 +74,45 @@ export default function AddTutorPage() {
               name="tutorName"
               placeholder="Rahim Ahmed"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Photo */}
+          {/* PHOTO URL */}
           <div>
-
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Photo URL
             </label>
 
             <input
               type="text"
               name="photo"
-              placeholder="imgbb / postimage link"
+              placeholder="https://example.com/photo.jpg"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Subject */}
+          {/* AVAILABILITY */}
           <div>
-
-            <label className="block mb-2 font-medium">
-              Subject / Category
-            </label>
-
-            <select
-              name="subject"
-              required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-            >
-
-              <option value="">
-                Select Subject
-              </option>
-
-              <option value="Mathematics">
-                Mathematics
-              </option>
-
-              <option value="Physics">
-                Physics
-              </option>
-
-              <option value="Chemistry">
-                Chemistry
-              </option>
-
-              <option value="English">
-                English
-              </option>
-
-              <option value="ICT">
-                ICT
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* Teaching Mode */}
-          <div>
-
-            <label className="block mb-2 font-medium">
-              Teaching Mode
-            </label>
-
-            <select
-              name="teachingMode"
-              required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-            >
-
-              <option value="">
-                Select Mode
-              </option>
-
-              <option value="Online">
-                Online
-              </option>
-
-              <option value="Offline">
-                Offline
-              </option>
-
-              <option value="Both">
-                Both
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* Availability */}
-          <div>
-
-            <label className="block mb-2 font-medium">
-              Available Days and Time
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
+              Available Time
             </label>
 
             <input
@@ -206,15 +120,21 @@ export default function AddTutorPage() {
               name="availability"
               placeholder="Sun - Thu 5:00 PM - 8:00 PM"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Hourly Fee */}
+          {/* HOURLY FEE */}
           <div>
-
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Hourly Fee
             </label>
 
@@ -223,15 +143,21 @@ export default function AddTutorPage() {
               name="hourlyFee"
               placeholder="500"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Total Slot */}
+          {/* TOTAL SLOT */}
           <div>
-
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Total Slot
             </label>
 
@@ -240,15 +166,21 @@ export default function AddTutorPage() {
               name="totalSlot"
               placeholder="10"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Session Date */}
+          {/* SESSION START DATE */}
           <div>
-
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Session Start Date
             </label>
 
@@ -256,15 +188,20 @@ export default function AddTutorPage() {
               type="date"
               name="sessionStartDate"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Institution */}
+          {/* INSTITUTION */}
           <div>
-
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Institution
             </label>
 
@@ -273,32 +210,96 @@ export default function AddTutorPage() {
               name="institution"
               placeholder="Dhaka University"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Location */}
+          {/* LOCATION */}
           <div>
-
-            <label className="block mb-2 font-medium">
-              Location (Area/City)
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
+              Location
             </label>
 
             <input
               type="text"
               name="location"
-              placeholder="Khulna"
+              placeholder="Dhaka"
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                hover:border-green-400 transition
+              "
             />
-
           </div>
 
-          {/* Experience */}
-          <div className="md:col-span-2">
+          {/* SUBJECT */}
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
+              Subject / Category
+            </label>
 
-            <label className="block mb-2 font-medium">
+            <select
+              name="subject"
+              required
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                focus:ring-2 focus:ring-green-500
+                transition
+              "
+            >
+              <option value="">Select Subject</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="English">English</option>
+              <option value="ICT">ICT</option>
+            </select>
+          </div>
+
+          {/* TEACHING MODE */}
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
+              Teaching Mode
+            </label>
+
+            <select
+              name="teachingMode"
+              required
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                focus:ring-2 focus:ring-green-500
+                transition
+              "
+            >
+              <option value="">Select Mode</option>
+              <option value="Online">Online</option>
+              <option value="Offline">Offline</option>
+              <option value="Both">Both</option>
+            </select>
+          </div>
+
+          {/* EXPERIENCE */}
+          <div className="md:col-span-2">
+            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
               Experience
             </label>
 
@@ -307,36 +308,35 @@ export default function AddTutorPage() {
               rows={5}
               placeholder="3 years teaching experience..."
               required
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+              className="
+                w-full border rounded-xl px-4 py-3
+                bg-white dark:bg-slate-800
+                text-gray-900 dark:text-white
+                border-gray-300 dark:border-slate-700
+                placeholder:text-gray-500 dark:placeholder:text-gray-400
+                focus:ring-2 focus:ring-green-500
+                transition
+              "
             ></textarea>
-
           </div>
 
-          {/* Button */}
+          {/* BUTTON */}
           <div className="md:col-span-2">
-
             <button
               type="submit"
               className="
-                w-full
-                bg-blue-600
-                hover:bg-blue-700
-                text-white
-                py-3
-                rounded-xl
-                font-semibold
-                transition
+                w-full bg-green-600 hover:bg-green-700
+                text-white py-3 rounded-xl font-semibold
+                transition-all duration-200
+                hover:shadow-lg active:scale-[0.98]
               "
             >
               Add Tutor
             </button>
-
           </div>
 
         </form>
-
       </div>
-
     </div>
   );
 }
