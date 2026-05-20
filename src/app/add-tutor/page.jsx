@@ -2,11 +2,19 @@
 
 import axios from "axios";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function AddTutorPage() {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user?.email) {
+      toast.error("Please login first");
+      return;
+    }
 
     const form = e.target;
 
@@ -22,6 +30,10 @@ export default function AddTutorPage() {
       experience: form.experience.value,
       location: form.location.value,
       teachingMode: form.teachingMode.value,
+
+      // ✅ IMPORTANT FIX
+      creatorEmail: user.email,
+
       createdAt: new Date(),
     };
 
@@ -64,276 +76,118 @@ export default function AddTutorPage() {
         >
 
           {/* TUTOR NAME */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Tutor Name
-            </label>
+          <input
+            type="text"
+            name="tutorName"
+            placeholder="Tutor Name"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
 
-            <input
-              type="text"
-              name="tutorName"
-              placeholder="Rahim Ahmed"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* PHOTO URL */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Photo URL
-            </label>
-
-            <input
-              type="text"
-              name="photo"
-              placeholder="https://example.com/photo.jpg"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* AVAILABILITY */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Available Time
-            </label>
-
-            <input
-              type="text"
-              name="availability"
-              placeholder="Sun - Thu 5:00 PM - 8:00 PM"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* HOURLY FEE */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Hourly Fee
-            </label>
-
-            <input
-              type="number"
-              name="hourlyFee"
-              placeholder="500"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* TOTAL SLOT */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Total Slot
-            </label>
-
-            <input
-              type="number"
-              name="totalSlot"
-              placeholder="10"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* SESSION START DATE */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Session Start Date
-            </label>
-
-            <input
-              type="date"
-              name="sessionStartDate"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* INSTITUTION */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Institution
-            </label>
-
-            <input
-              type="text"
-              name="institution"
-              placeholder="Dhaka University"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
-
-          {/* LOCATION */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Location
-            </label>
-
-            <input
-              type="text"
-              name="location"
-              placeholder="Dhaka"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                hover:border-green-400 transition
-              "
-            />
-          </div>
+          {/* PHOTO */}
+          <input
+            type="text"
+            name="photo"
+            placeholder="Photo URL"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
 
           {/* SUBJECT */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Subject / Category
-            </label>
+          <select
+            name="subject"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          >
+            <option value="">Select Subject</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="English">English</option>
+            <option value="ICT">ICT</option>
+          </select>
 
-            <select
-              name="subject"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                focus:ring-2 focus:ring-green-500
-                transition
-              "
-            >
-              <option value="">Select Subject</option>
-              <option value="Mathematics">Mathematics</option>
-              <option value="Physics">Physics</option>
-              <option value="Chemistry">Chemistry</option>
-              <option value="English">English</option>
-              <option value="ICT">ICT</option>
-            </select>
-          </div>
+          {/* AVAILABILITY */}
+          <input
+            type="text"
+            name="availability"
+            placeholder="Sun - Thu 5:00 PM - 8:00 PM"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
+
+          {/* HOURLY FEE */}
+          <input
+            type="number"
+            name="hourlyFee"
+            placeholder="Hourly Fee"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
+
+          {/* TOTAL SLOT */}
+          <input
+            type="number"
+            name="totalSlot"
+            placeholder="Total Slot"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
+
+          {/* SESSION START DATE */}
+          <input
+            type="date"
+            name="sessionStartDate"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
+
+          {/* INSTITUTION */}
+          <input
+            type="text"
+            name="institution"
+            placeholder="Institution"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
+
+          {/* LOCATION */}
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          />
 
           {/* TEACHING MODE */}
-          <div>
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Teaching Mode
-            </label>
-
-            <select
-              name="teachingMode"
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                focus:ring-2 focus:ring-green-500
-                transition
-              "
-            >
-              <option value="">Select Mode</option>
-              <option value="Online">Online</option>
-              <option value="Offline">Offline</option>
-              <option value="Both">Both</option>
-            </select>
-          </div>
+          <select
+            name="teachingMode"
+            required
+            className="w-full border rounded-xl px-4 py-3"
+          >
+            <option value="">Select Mode</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+            <option value="Both">Both</option>
+          </select>
 
           {/* EXPERIENCE */}
-          <div className="md:col-span-2">
-            <label className="block mb-2 font-medium text-gray-700 dark:text-gray-200">
-              Experience
-            </label>
+          <textarea
+            name="experience"
+            placeholder="Experience"
+            rows={5}
+            required
+            className="w-full border rounded-xl px-4 py-3 md:col-span-2"
+          />
 
-            <textarea
-              name="experience"
-              rows={5}
-              placeholder="3 years teaching experience..."
-              required
-              className="
-                w-full border rounded-xl px-4 py-3
-                bg-white dark:bg-slate-800
-                text-gray-900 dark:text-white
-                border-gray-300 dark:border-slate-700
-                placeholder:text-gray-500 dark:placeholder:text-gray-400
-                focus:ring-2 focus:ring-green-500
-                transition
-              "
-            ></textarea>
-          </div>
-
-          {/* BUTTON */}
-          <div className="md:col-span-2">
-            <button
-              type="submit"
-              className="
-                w-full bg-green-600 hover:bg-green-700
-                text-white py-3 rounded-xl font-semibold
-                transition-all duration-200
-                hover:shadow-lg active:scale-[0.98]
-              "
-            >
-              Add Tutor
-            </button>
-          </div>
+          {/* SUBMIT BUTTON */}
+          <button
+            type="submit"
+            className="md:col-span-2 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold transition"
+          >
+            Add Tutor
+          </button>
 
         </form>
       </div>
