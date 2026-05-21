@@ -1,6 +1,7 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+
 import {
   Button,
   Description,
@@ -10,15 +11,17 @@ import {
   Label,
   TextField,
   Card,
+
 } from "@heroui/react";
 
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginPage = () => {
-
   const router = useRouter();
 
+  // LOGIN
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,8 +33,6 @@ const LoginPage = () => {
       email: user.email,
       password: user.password,
     });
-
-    console.log(data, error);
 
     if (data) {
       toast.success("Login successful!");
@@ -46,88 +47,215 @@ const LoginPage = () => {
     }
   };
 
+  // GOOGLE LOGIN
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
+  };
+
   return (
-    <div className="flex flex-col flex-1 max-w-7xl items-center justify-center bg-zinc-50 font-sans dark:bg-black min-h-screen">
+    <section className="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-green-50 via-white to-emerald-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
 
-      <h1 className="text-2xl font-bold text-gray-800 dark:text-white mt-6">
-        Login to your account
-      </h1>
+      <div className="w-full max-w-6xl grid lg:grid-cols-2 bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-slate-800">
 
-      <p className="text-gray-600 dark:text-gray-400">
-        Continue your learning journey with trusted tutors in one place.
-      </p>
+        {/* LEFT SIDE */}
+        <div className="hidden lg:flex flex-col justify-center bg-gradient-to-br from-green-600 to-emerald-700 text-white p-12 relative overflow-hidden">
 
-      <Card className="border w-full max-w-md mt-6 mb-10 p-6">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
 
-        <Form
-          onSubmit={onSubmit}
-          className="flex w-full flex-col gap-4"
-        >
+          <div className="relative z-10">
 
-          <TextField
-            isRequired
-            name="email"
-            type="email"
-            validate={(value) => {
-              if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
-              ) {
-                return "Please enter a valid email address";
-              }
+            <h1 className="text-5xl font-bold leading-tight mb-6">
+              Welcome Back
+            </h1>
 
-              return null;
-            }}
-          >
-            <Label>Email</Label>
+            <p className="text-green-50 text-lg leading-8 mb-8">
+              Login to continue booking tutors, managing learning
+              sessions, and growing your skills with EduQueue.
+            </p>
 
-            <Input placeholder="john@example.com" />
+            <div className="space-y-5">
 
-            <FieldError />
-          </TextField>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-white"></div>
+                <p>Verified Professional Tutors</p>
+              </div>
 
-          <TextField
-            isRequired
-            minLength={8}
-            name="password"
-            type="password"
-            validate={(value) => {
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-white"></div>
+                <p>Fast & Secure Session Booking</p>
+              </div>
 
-              if (value.length < 8) {
-                return "Password must be at least 8 characters";
-              }
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-white"></div>
+                <p>Flexible Online Learning Experience</p>
+              </div>
 
-              if (!/[A-Z]/.test(value)) {
-                return "Password must contain at least one uppercase letter";
-              }
+            </div>
+          </div>
+        </div>
 
-              if (!/[0-9]/.test(value)) {
-                return "Password must contain at least one number";
-              }
+        {/* RIGHT SIDE */}
+        <div className="flex items-center justify-center p-5 sm:p-8 lg:p-12">
 
-              return null;
-            }}
-          >
-            <Label>Password</Label>
+          <Card className="w-full bg-transparent shadow-none border-none">
+        
 
-            <Input placeholder="Enter your password" />
+              {/* MOBILE LOGO */}
+              <div className="lg:hidden text-center mb-8">
 
-            <Description>
-              Must be at least 8 characters with 1 uppercase and 1 number
-            </Description>
+                <h1 className="text-4xl font-bold text-green-600">
+                  EduQueue
+                </h1>
 
-            <FieldError />
-          </TextField>
+                <p className="text-gray-500 dark:text-gray-400 mt-2">
+                  Smart Tutor Booking Platform
+                </p>
 
-          <Button
-            className="w-full bg-blue-500 text-white hover:bg-blue-600"
-            type="submit"
-          >
-            Login
-          </Button>
+              </div>
 
-        </Form>
-      </Card>
-    </div>
+              {/* HEADER */}
+              <div className="mb-8">
+
+                <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-white">
+                  Login to Account
+                </h2>
+
+                <p className="text-gray-500 dark:text-gray-400 mt-2">
+                  Continue your learning journey with expert tutors.
+                </p>
+
+              </div>
+
+              {/* FORM */}
+              <Form
+                onSubmit={onSubmit}
+                className="flex flex-col gap-5"
+              >
+
+                {/* EMAIL */}
+                <TextField
+                  isRequired
+                  name="email"
+                  type="email"
+                  validate={(value) => {
+                    if (
+                      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+                        value
+                      )
+                    ) {
+                      return "Please enter a valid email";
+                    }
+
+                    return null;
+                  }}
+                >
+                  <Label className="dark:text-gray-200">
+                    Email Address
+                  </Label>
+
+                  <Input
+                    placeholder="john@example.com"
+                    className="dark:text-white"
+                  />
+
+                  <FieldError />
+                </TextField>
+
+                {/* PASSWORD */}
+                <TextField
+                  isRequired
+                  minLength={8}
+                  name="password"
+                  type="password"
+                  validate={(value) => {
+
+                    if (value.length < 8) {
+                      return "Password must be at least 8 characters";
+                    }
+
+                    if (!/[A-Z]/.test(value)) {
+                      return "Must contain 1 uppercase letter";
+                    }
+
+                    if (!/[0-9]/.test(value)) {
+                      return "Must contain 1 number";
+                    }
+
+                    return null;
+                  }}
+                >
+                  <Label className="dark:text-gray-200">
+                    Password
+                  </Label>
+
+                  <Input
+                    placeholder="Enter your password"
+                    className="dark:text-white"
+                  />
+
+                  <Description className="text-xs">
+                    Minimum 8 characters, 1 uppercase & 1 number
+                  </Description>
+
+                  <FieldError />
+                </TextField>
+
+                {/* LOGIN BUTTON */}
+                <Button
+                  type="submit"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 rounded-xl text-base transition-all duration-300 shadow-lg hover:scale-[1.01]"
+                >
+                  Login
+                </Button>
+
+                {/* DIVIDER */}
+                <div className="flex items-center gap-3 w-full py-2">
+
+                  <div className="flex-1 h-[1px] bg-gray-300 dark:bg-slate-700"></div>
+
+                  <span className="text-sm text-gray-500">
+                    OR
+                  </span>
+
+                  <div className="flex-1 h-[1px] bg-gray-300 dark:bg-slate-700"></div>
+
+                </div>
+
+                {/* GOOGLE LOGIN */}
+                <Button
+                  type="button"
+                  variant="bordered"
+                  onPress={handleGoogleLogin}
+                  className="w-full py-6 rounded-xl font-medium border-gray-300 dark:border-slate-700 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-all"
+                >
+                  Continue with Google
+                </Button>
+
+              </Form>
+
+              {/* SIGNUP */}
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-8">
+
+                Don&apos;t have an account?{" "}
+
+                <Link
+                  href="/signup"
+                  className="text-green-600 hover:underline font-semibold"
+                >
+                  Create Account
+                </Link>
+
+              </p>
+
+       
+          </Card>
+
+        </div>
+      </div>
+    </section>
   );
 };
 
