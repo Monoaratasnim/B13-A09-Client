@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
 import {
   Menu,
   X,
@@ -18,390 +17,203 @@ import { useTheme } from "next-themes";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
-const Navbar = () => {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
-
   const { theme, setTheme } = useTheme();
 
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
-  // LOGOUT
   const handleLogout = async () => {
     await authClient.signOut();
-
-    toast.success("Logout successful");
-
+    toast.success("Logged out successfully");
     router.push("/login");
     router.refresh();
   };
 
-  // NAV LINK STYLE
-  const navLinkClass = (path) =>
-    `relative transition-all duration-300 hover:text-green-600 whitespace-nowrap ${
+  const linkClass = (path) =>
+    `text-sm font-medium transition hover:text-green-500 ${
       pathname === path
-        ? "text-green-600 font-semibold"
+        ? "text-green-500"
         : "text-slate-700 dark:text-slate-200"
     }`;
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur border-b border-slate-200 dark:border-slate-800">
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* MAIN NAVBAR */}
-        <div className="grid grid-cols-3 items-center h-16">
+        {/* MAIN BAR */}
+        <div className="flex items-center justify-between h-16">
 
-          {/* LEFT LOGO */}
-          <div className="justify-self-start">
-            <Link href="/">
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-green-600">
-                  MediQueue
-                </h1>
+          {/* LOGO */}
+          <Link href="/" className="flex flex-col leading-tight">
+            <span className="text-xl sm:text-2xl font-bold text-green-600">
+              EduQueue
+            </span>
+            <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
+              Tutor Booking System
+            </span>
+          </Link>
 
-                <p className="text-[11px] text-gray-500 dark:text-gray-400 -mt-1">
-                  Tutor Booking Platform
-                </p>
-              </div>
-            </Link>
-          </div>
+          {/* DESKTOP NAV */}
+          <div className="hidden md:flex items-center gap-5 lg:gap-6">
+            <Link href="/" className={linkClass("/")}>Home</Link>
+            <Link href="/tutors" className={linkClass("/tutors")}>Tutors</Link>
 
-          {/* CENTER NAV */}
-          <div className="hidden md:flex items-center justify-center gap-5 text-[15px] font-medium whitespace-nowrap">
-
-            <Link href="/" className={navLinkClass("/")}>
-              Home
-            </Link>
-
-            <Link href="/tutors" className={navLinkClass("/tutors")}>
-              Tutors
-            </Link>
-
-            {/* BEFORE LOGIN */}
-            {!user && (
+            {!user ? (
               <>
-                <Link
-                  href="/services"
-                  className={navLinkClass("/services")}
-                >
-                  Services
-                </Link>
-
-                <Link
-                  href="/about"
-                  className={navLinkClass("/about")}
-                >
-                  About
-                </Link>
-
-                <Link
-                  href="/contact"
-                  className={navLinkClass("/contact")}
-                >
-                  Contact
-                </Link>
+                <Link href="/services" className={linkClass("/services")}>Services</Link>
+                <Link href="/about" className={linkClass("/about")}>About</Link>
+                <Link href="/contact" className={linkClass("/contact")}>Contact</Link>
               </>
-            )}
-
-            {/* AFTER LOGIN */}
-            {user && (
+            ) : (
               <>
-                <Link
-                  href="/add-tutor"
-                  className={navLinkClass("/add-tutor")}
-                >
-                  Add Tutor
-                </Link>
-
-                <Link
-                  href="/my-tutors"
-                  className={navLinkClass("/my-tutors")}
-                >
-                  My Tutors
-                </Link>
-
-                <Link
-                  href="/booked-sessions"
-                  className={navLinkClass("/booked-sessions")}
-                >
+                <Link href="/add-tutor" className={linkClass("/add-tutor")}>Add Tutor</Link>
+                <Link href="/my-tutors" className={linkClass("/my-tutors")}>My Tutors</Link>
+                <Link href="/booked-sessions" className={linkClass("/booked-sessions")}>
                   Booked Sessions
                 </Link>
               </>
             )}
           </div>
 
-          {/* RIGHT SIDE */}
-          <div className="hidden md:flex items-center gap-4 justify-self-end">
+          {/* RIGHT SIDE (DESKTOP) */}
+          <div className="hidden md:flex items-center gap-3">
 
-            {/* THEME TOGGLE */}
+            {/* THEME */}
             {mounted && (
               <button
                 onClick={() =>
                   setTheme(theme === "dark" ? "light" : "dark")
                 }
-                className="p-2 rounded-full border border-gray-300 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 transition"
+                className="p-2 rounded-full border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
-                {theme === "dark" ? (
-                  <Sun
-                    size={18}
-                    className="text-yellow-400"
-                  />
-                ) : (
-                  <Moon
-                    size={18}
-                    className="text-slate-700"
-                  />
-                )}
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
               </button>
             )}
 
             {/* USER */}
             {user ? (
               <div className="relative">
-
-                {/* PROFILE BUTTON */}
-                <button
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="focus:outline-none"
-                >
+                <button onClick={() => setProfileOpen(!profileOpen)}>
                   <img
-                    src={
-                      user?.image ||
-                      "https://i.ibb.co/4pDNDk1/avatar.png"
-                    }
-                    alt="profile"
-                    className="w-10 h-10 rounded-full border-2 border-green-500 object-cover shadow-sm"
+                    src={user?.image || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                    className="w-9 h-9 rounded-full border-2 border-green-500"
                   />
                 </button>
 
-                {/* DROPDOWN */}
                 {profileOpen && (
-                  <div className="absolute right-0 mt-3 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+                  <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-slate-900 border rounded-xl shadow-xl overflow-hidden">
 
-                    {/* USER INFO */}
-                    <div className="px-4 py-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
-
-                      <h3 className="font-semibold text-slate-800 dark:text-white">
-                        {user?.name || "User"}
-                      </h3>
-
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                    <div className="p-3 border-b dark:border-slate-700">
+                      <p className="font-semibold">{user?.name}</p>
+                      <p className="text-xs text-slate-500 truncate">
                         {user?.email}
                       </p>
-
                     </div>
 
-                    {/* PROFILE */}
-                    <Link
-                      href="/profile"
-                      className="flex items-center gap-3 px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition"
-                    >
-                      <UserCircle size={18} />
-                      Profile
+                    <Link href="/profile" className="flex gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+                      <UserCircle size={16} /> Profile
                     </Link>
 
-                    {/* DASHBOARD */}
-                    <Link
-                      href="/my-tutors"
-                      className="flex items-center gap-3 px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition"
-                    >
-                      <LayoutDashboard size={18} />
-                      Dashboard
+                    <Link href="/my-tutors" className="flex gap-2 px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+                      <LayoutDashboard size={16} /> Dashboard
                     </Link>
 
-                    {/* LOGOUT */}
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                      className="w-full text-left flex gap-2 px-4 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
-                      <LogOut size={18} />
-                      Logout
+                      <LogOut size={16} /> Logout
                     </button>
 
                   </div>
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-3">
-
+              <div className="flex gap-2">
                 <Link href="/login">
-                  <button className="px-5 py-2 rounded-lg border border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-slate-800 transition font-medium">
+                  <button className="px-4 py-2 text-sm border border-green-600 text-green-600 rounded-lg hover:bg-green-50 dark:hover:bg-slate-800">
                     Login
                   </button>
                 </Link>
 
                 <Link href="/signup">
-                  <button className="px-5 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition font-medium shadow-sm">
+                  <button className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700">
                     Register
                   </button>
                 </Link>
-
               </div>
             )}
           </div>
 
-          {/* MOBILE MENU BUTTON */}
-          <div className="md:hidden justify-self-end">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="text-slate-700 dark:text-white"
-            >
-              {menuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
-
+          {/* MOBILE BUTTON */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-slate-700 dark:text-white"
+          >
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </div>
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div className="md:hidden bg-white dark:bg-slate-950 border-t border-gray-200 dark:border-slate-800 px-4 py-5 space-y-5">
+        <div className="md:hidden px-4 py-5 space-y-4 border-t dark:border-slate-800 bg-white dark:bg-slate-950">
 
-          {/* LINKS */}
-          <div className="flex flex-col gap-4 font-medium">
+          <div className="flex flex-col gap-3 text-sm font-medium">
 
-            <Link
-              href="/"
-              onClick={() => setMenuOpen(false)}
-              className={navLinkClass("/")}
-            >
-              Home
-            </Link>
+            <Link href="/">Home</Link>
+            <Link href="/tutors">Tutors</Link>
 
-            <Link
-              href="/tutors"
-              onClick={() => setMenuOpen(false)}
-              className={navLinkClass("/tutors")}
-            >
-              Tutors
-            </Link>
-
-            {!user && (
+            {!user ? (
               <>
-                <Link
-                  href="/services"
-                  onClick={() => setMenuOpen(false)}
-                  className={navLinkClass("/services")}
-                >
-                  Services
-                </Link>
-
-                <Link
-                  href="/about"
-                  onClick={() => setMenuOpen(false)}
-                  className={navLinkClass("/about")}
-                >
-                  About
-                </Link>
-
-                <Link
-                  href="/contact"
-                  onClick={() => setMenuOpen(false)}
-                  className={navLinkClass("/contact")}
-                >
-                  Contact
-                </Link>
+                <Link href="/services">Services</Link>
+                <Link href="/about">About</Link>
+                <Link href="/contact">Contact</Link>
               </>
-            )}
-
-            {user && (
+            ) : (
               <>
-                <Link
-                  href="/add-tutor"
-                  onClick={() => setMenuOpen(false)}
-                  className={navLinkClass("/add-tutor")}
-                >
-                  Add Tutor
-                </Link>
-
-                <Link
-                  href="/my-tutors"
-                  onClick={() => setMenuOpen(false)}
-                  className={navLinkClass("/my-tutors")}
-                >
-                  My Tutors
-                </Link>
-
-                <Link
-                  href="/booked-sessions"
-                  onClick={() => setMenuOpen(false)}
-                  className={navLinkClass("/booked-sessions")}
-                >
-                  Booked Sessions
-                </Link>
+                <Link href="/add-tutor">Add Tutor</Link>
+                <Link href="/my-tutors">My Tutors</Link>
+                <Link href="/booked-sessions">Booked Sessions</Link>
               </>
             )}
           </div>
 
-          {/* THEME */}
-          {mounted && (
-            <button
-              onClick={() =>
-                setTheme(theme === "dark" ? "light" : "dark")
-              }
-              className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-700 py-2 rounded-lg text-slate-700 dark:text-slate-200"
-            >
-              {theme === "dark" ? (
-                <>
-                  <Sun size={18} />
-                  Light Mode
-                </>
-              ) : (
-                <>
-                  <Moon size={18} />
-                  Dark Mode
-                </>
-              )}
-            </button>
-          )}
-
-          {/* MOBILE USER */}
+          {/* USER MOBILE */}
           {user ? (
-            <div className="border-t border-gray-200 dark:border-slate-700 pt-4 space-y-4">
+            <div className="pt-4 border-t dark:border-slate-800 space-y-3">
 
               <div className="flex items-center gap-3">
-
                 <img
-                  src={
-                    user?.image ||
-                    "https://i.ibb.co/4pDNDk1/avatar.png"
-                  }
-                  alt="profile"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-green-500"
+                  src={user?.image || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                  className="w-10 h-10 rounded-full border-2 border-green-500"
                 />
-
                 <div>
-                  <h4 className="font-semibold text-slate-800 dark:text-white">
-                    {user?.name}
-                  </h4>
-
-                  <p className="text-sm text-gray-500">
-                    {user?.email}
-                  </p>
+                  <p className="font-semibold">{user?.name}</p>
+                  <p className="text-xs text-slate-500">{user?.email}</p>
                 </div>
-
               </div>
 
               <button
                 onClick={handleLogout}
-                className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
+                className="w-full bg-red-500 text-white py-2 rounded-lg"
               >
                 Logout
               </button>
 
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2 pt-4 border-t dark:border-slate-800">
 
               <Link href="/login">
                 <button className="w-full border border-green-600 text-green-600 py-2 rounded-lg">
@@ -421,6 +233,4 @@ const Navbar = () => {
       )}
     </nav>
   );
-};
-
-export default Navbar;
+}

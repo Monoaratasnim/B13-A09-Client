@@ -26,7 +26,6 @@ const slides = [
 export default function Banner() {
   const [index, setIndex] = useState(0);
 
-  // AUTO SLIDE
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
@@ -44,8 +43,12 @@ export default function Banner() {
   };
 
   return (
-    <section className="relative w-full h-[70vh] overflow-hidden">
-
+    <section
+      className="
+        relative w-full overflow-hidden
+        h-[55vh] sm:h-[65vh] md:h-[75vh] lg:h-[90vh]
+      "
+    >
       {/* SLIDES */}
       {slides.map((slide, i) => (
         <div
@@ -54,7 +57,6 @@ export default function Banner() {
             i === index ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-          {/* IMAGE */}
           <Image
             src={slide.image}
             alt={slide.title}
@@ -63,23 +65,37 @@ export default function Banner() {
             className="object-cover"
           />
 
-          {/* DARK OVERLAY */}
-          <div className="absolute inset-0 bg-black/60"></div>
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/60" />
 
-          {/* CONTENT */}
-          <div className="absolute inset-0 flex items-center justify-center px-4">
-            <div className="text-center max-w-2xl text-white">
+          {/* Content */}
+          <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-6">
+            <div className="text-center max-w-xl sm:max-w-2xl lg:max-w-3xl text-white">
 
-              <h1 className="text-3xl md:text-5xl font-bold mb-4">
+              <h1 className="
+                font-bold leading-snug lg:leading-tight
+                text-2xl sm:text-4xl lg:text-6xl
+                mb-3 sm:mb-6
+              ">
                 {slide.title}
               </h1>
 
-              <p className="text-gray-200 text-sm md:text-lg mb-6">
+              <p className="
+                text-gray-200
+                text-sm sm:text-base lg:text-lg
+                mb-5 sm:mb-8
+              ">
                 {slide.desc}
               </p>
 
               <Link href="/tutors">
-                <button className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-full font-semibold transition">
+                <button className="
+                  bg-green-600 hover:bg-green-700
+                  px-5 sm:px-8 py-3 sm:py-4
+                  rounded-full
+                  text-sm sm:text-lg font-semibold
+                  transition shadow-lg
+                ">
                   Explore Tutors
                 </button>
               </Link>
@@ -89,35 +105,50 @@ export default function Banner() {
         </div>
       ))}
 
-      {/* LEFT BUTTON */}
+      {/* LEFT */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur"
+        className="
+          absolute left-2 sm:left-5
+          top-1/2 -translate-y-1/2
+          bg-white/20 hover:bg-white/40
+          text-white p-2 sm:p-3
+          rounded-full backdrop-blur
+        "
       >
         <ChevronLeft size={28} />
       </button>
 
-      {/* RIGHT BUTTON */}
+      {/* RIGHT */}
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur"
+        className="
+          absolute right-2 sm:right-5
+          top-1/2 -translate-y-1/2
+          bg-white/20 hover:bg-white/40
+          text-white p-2 sm:p-3
+          rounded-full backdrop-blur
+        "
       >
         <ChevronRight size={28} />
       </button>
 
       {/* DOTS */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="
+        absolute bottom-3 sm:bottom-6
+        left-1/2 -translate-x-1/2
+        flex gap-2
+      ">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setIndex(i)}
-            className={`w-3 h-3 rounded-full transition ${
-              i === index ? "bg-green-500" : "bg-white/50"
+            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition ${
+              i === index ? "bg-green-500 scale-125" : "bg-white/50"
             }`}
           />
         ))}
       </div>
-
     </section>
   );
 }

@@ -1,4 +1,10 @@
 import Link from "next/link";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaYoutube,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -12,7 +18,7 @@ const Footer = () => {
           {/* BRAND */}
           <div>
             <h2 className="text-2xl font-bold text-green-600 mb-4">
-              MediQueue
+              EduQueue
             </h2>
 
             <p className="text-gray-600 dark:text-gray-300 leading-7">
@@ -28,7 +34,6 @@ const Footer = () => {
             </h3>
 
             <ul className="space-y-3 text-gray-600 dark:text-gray-300">
-
               <li>
                 <Link href="/tutors" className="hover:text-green-600">
                   Find Tutors
@@ -52,7 +57,6 @@ const Footer = () => {
                   Online Learning
                 </Link>
               </li>
-
             </ul>
           </div>
 
@@ -62,12 +66,10 @@ const Footer = () => {
               Contact
             </h3>
 
-            <div className="space-y-3 text-gray-600 dark:text-gray-300">
-
-              <p>📧 support@mediqueue.com</p>
-              <p>📞 +880 1234-567890</p>
-              <p>📍 Chattogram, Bangladesh</p>
-
+            <div className="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
+              <p>support@eduqueue.com</p>
+              <p>+880 1854325678</p>
+              <p>Chattogram, Bangladesh</p>
             </div>
           </div>
 
@@ -77,38 +79,38 @@ const Footer = () => {
               Follow Us
             </h3>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex gap-4">
 
               <a
                 href="https://facebook.com"
                 target="_blank"
-                className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition text-sm"
+                className="p-3 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition"
               >
-                Facebook
+                <FaFacebookF />
               </a>
 
               <a
                 href="https://instagram.com"
                 target="_blank"
-                className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition text-sm"
+                className="p-3 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition"
               >
-                Instagram
+                <FaInstagram />
               </a>
 
               <a
                 href="https://linkedin.com"
                 target="_blank"
-                className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition text-sm"
+                className="p-3 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition"
               >
-                LinkedIn
+                <FaLinkedinIn />
               </a>
 
               <a
                 href="https://youtube.com"
                 target="_blank"
-                className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition text-sm"
+                className="p-3 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-green-600 hover:text-white transition"
               >
-                YouTube
+                <FaYoutube />
               </a>
 
             </div>
@@ -118,9 +120,7 @@ const Footer = () => {
 
         {/* COPYRIGHT */}
         <div className="border-t border-gray-200 dark:border-slate-700 mt-10 pt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-
-          © {new Date().getFullYear()} MediQueue – Tutor Booking System. All rights reserved.
-
+          © {new Date().getFullYear()} EduQueue – Tutor Booking System. All rights reserved.
         </div>
 
       </div>
