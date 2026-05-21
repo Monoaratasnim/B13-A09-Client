@@ -43,111 +43,127 @@ export default function Banner() {
   };
 
   return (
-    <section
-      className="
-        relative w-full overflow-hidden
-        h-[55vh] sm:h-[65vh] md:h-[75vh] lg:h-[90vh]
-      "
-    >
-      {/* SLIDES */}
-      {slides.map((slide, i) => (
-        <div
-          key={i}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            i === index ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
-          <Image
-            src={slide.image}
-            alt={slide.title}
-            fill
-            priority
-            className="object-cover"
-          />
+    <section className="relative w-full overflow-hidden">
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/60" />
+      {/* ✅ RESPONSIVE HEIGHT FIX */}
+      <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[85vh]">
 
-          {/* Content */}
-          <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-6">
-            <div className="text-center max-w-xl sm:max-w-2xl lg:max-w-3xl text-white">
+        {/* SLIDES */}
+        {slides.map((slide, i) => (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              i === index ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              fill
+              priority
+              className="object-cover"
+            />
 
-              <h1 className="
-                font-bold leading-snug lg:leading-tight
-                text-2xl sm:text-4xl lg:text-6xl
-                mb-3 sm:mb-6
+            {/* DARK OVERLAY */}
+            <div className="absolute inset-0 bg-black/60" />
+
+            {/* CONTENT */}
+            <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-6 lg:px-10">
+
+              <div className="
+                text-center text-white
+                max-w-[95%] sm:max-w-2xl lg:max-w-4xl
+                translate-y-[-6%] sm:translate-y-0
               ">
-                {slide.title}
-              </h1>
 
-              <p className="
-                text-gray-200
-                text-sm sm:text-base lg:text-lg
-                mb-5 sm:mb-8
-              ">
-                {slide.desc}
-              </p>
-
-              <Link href="/tutors">
-                <button className="
-                  bg-green-600 hover:bg-green-700
-                  px-5 sm:px-8 py-3 sm:py-4
-                  rounded-full
-                  text-sm sm:text-lg font-semibold
-                  transition shadow-lg
+                {/* TITLE */}
+                <h1 className="
+                  font-bold leading-snug sm:leading-tight
+                  text-xl sm:text-3xl md:text-5xl lg:text-6xl
+                  mb-3 sm:mb-5
                 ">
-                  Explore Tutors
-                </button>
-              </Link>
+                  {slide.title}
+                </h1>
 
+                {/* DESCRIPTION */}
+                <p className="
+                  text-gray-200
+                  text-xs sm:text-sm md:text-lg lg:text-xl
+                  mb-5 sm:mb-7
+                ">
+                  {slide.desc}
+                </p>
+
+                {/* BUTTON */}
+                <Link href="/tutors">
+                  <button className="
+                    bg-green-600 hover:bg-green-700
+                    px-5 sm:px-7 md:px-9
+                    py-2.5 sm:py-3 md:py-4
+                    rounded-full
+                    text-sm sm:text-base md:text-lg
+                    font-semibold
+                    transition shadow-lg
+                    w-full sm:w-auto
+                  ">
+                    Explore Tutors
+                  </button>
+                </Link>
+
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-
-      {/* LEFT */}
-      <button
-        onClick={prevSlide}
-        className="
-          absolute left-2 sm:left-5
-          top-1/2 -translate-y-1/2
-          bg-white/20 hover:bg-white/40
-          text-white p-2 sm:p-3
-          rounded-full backdrop-blur
-        "
-      >
-        <ChevronLeft size={28} />
-      </button>
-
-      {/* RIGHT */}
-      <button
-        onClick={nextSlide}
-        className="
-          absolute right-2 sm:right-5
-          top-1/2 -translate-y-1/2
-          bg-white/20 hover:bg-white/40
-          text-white p-2 sm:p-3
-          rounded-full backdrop-blur
-        "
-      >
-        <ChevronRight size={28} />
-      </button>
-
-      {/* DOTS */}
-      <div className="
-        absolute bottom-3 sm:bottom-6
-        left-1/2 -translate-x-1/2
-        flex gap-2
-      ">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition ${
-              i === index ? "bg-green-500 scale-125" : "bg-white/50"
-            }`}
-          />
         ))}
+
+        {/* LEFT BUTTON */}
+        <button
+          onClick={prevSlide}
+          className="
+            absolute left-2 sm:left-4 md:left-6
+            top-1/2 -translate-y-1/2
+            bg-white/20 hover:bg-white/40
+            text-white
+            p-2 sm:p-3 md:p-4
+            rounded-full backdrop-blur
+          "
+        >
+          <ChevronLeft size={24} className="sm:w-7 sm:h-7" />
+        </button>
+
+        {/* RIGHT BUTTON */}
+        <button
+          onClick={nextSlide}
+          className="
+            absolute right-2 sm:right-4 md:right-6
+            top-1/2 -translate-y-1/2
+            bg-white/20 hover:bg-white/40
+            text-white
+            p-2 sm:p-3 md:p-4
+            rounded-full backdrop-blur
+          "
+        >
+          <ChevronRight size={24} className="sm:w-7 sm:h-7" />
+        </button>
+
+        {/* DOTS */}
+        <div className="
+          absolute bottom-3 sm:bottom-5 md:bottom-6
+          left-1/2 -translate-x-1/2
+          flex gap-2 sm:gap-3
+        ">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`transition rounded-full ${
+                i === index
+                  ? "bg-green-500 w-3 h-3 sm:w-3.5 sm:h-3.5 scale-125"
+                  : "bg-white/50 w-2.5 h-2.5 sm:w-3 sm:h-3"
+              }`}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );

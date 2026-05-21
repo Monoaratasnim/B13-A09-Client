@@ -7,6 +7,10 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function TutorDetailsPage() {
+  useEffect(() => {
+    document.title = "Tutor Details | EduQueue";
+  }, []);
+
   const params = useParams();
 
   const [tutor, setTutor] = useState(null);
@@ -84,13 +88,27 @@ export default function TutorDetailsPage() {
     } catch (error) {
       console.log(error);
 
-      // ✅ FIXED ERROR HANDLING
       const message =
         error?.response?.data?.message || "Something went wrong";
 
       toast.error(message);
     }
   };
+
+  /* =========================
+     DATE FORMAT FUNCTION
+  ========================== */
+  function formatDate(dateString) {
+    if (!dateString) return "Not set";
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
 
   if (loading || !tutor) {
     return (
@@ -144,7 +162,13 @@ export default function TutorDetailsPage() {
               <Info label="Location" value={tutor?.location} />
               <Info label="Mode" value={tutor?.teachingMode} />
               <Info label="Availability" value={tutor?.availability} />
-              <Info label="Session Date" value={tutor?.sessionStartDate} />
+
+              {/* ✅ FIXED DATE */}
+              <Info
+                label="Session Date"
+                value={formatDate(tutor?.sessionStartDate)}
+              />
+
               <Info label="Slots" value={tutor?.totalSlot} />
 
             </div>
@@ -179,7 +203,7 @@ export default function TutorDetailsPage() {
         </div>
       </div>
 
-      {/* MODAL (UNCHANGED) */}
+      {/* MODAL */}
       {openModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
 
@@ -196,9 +220,6 @@ export default function TutorDetailsPage() {
               <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                 Book Session
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Confirm your booking
-              </p>
             </div>
 
             <form onSubmit={handleBookSession} className="space-y-3">

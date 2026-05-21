@@ -17,8 +17,21 @@ import {
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const LoginPage = () => {
+    useEffect(() => {
+      document.title = "Login | EduQueue";
+    }, []);
+      useEffect(() => {
+
+    const clearSession = async () => {
+      await authClient.signOut();
+    };
+
+    clearSession();
+
+  }, []);
   const router = useRouter();
 
   // LOGIN
@@ -48,12 +61,18 @@ const LoginPage = () => {
   };
 
   // GOOGLE LOGIN
-  const handleGoogleLogin = async () => {
+const handleGoogleLogin = async () => {
+  try {
     await authClient.signIn.social({
       provider: "google",
       callbackURL: "/",
     });
-  };
+  } catch (err) {
+    console.log(err);
+    toast.error("Google login failed!");
+  }
+};
+
 
   return (
     <section className="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-green-50 via-white to-emerald-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">

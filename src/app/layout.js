@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "MediQueue",
+  title: "EduQueue",
   description: "Tutor Booking System",
 };
 

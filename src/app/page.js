@@ -6,8 +6,19 @@ import Link from "next/link";
 import Image from "next/image";
 import Banner from "@/components/Banner";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function HomePage() {
+    useEffect(() => {
+      document.title = "Home | EduQueue";
+    }, []);
+  const router = useRouter();
+
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +36,18 @@ export default function HomePage() {
 
     fetchTutors();
   }, []);
+
+  // ✅ LOGIN PROTECTED NAVIGATION
+  const handleBookSession = (id) => {
+    if (!user) {
+      toast.error("Please login first");
+      router.push("/login");
+      return;
+    }
+
+    router.push(`/tutors/${id}`);
+  };
+ 
 
   return (
     <div className="bg-gray-50 dark:bg-slate-950">
@@ -48,14 +71,14 @@ export default function HomePage() {
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-            {tutors.map((tutor, i) => (
+            {tutors.map((tutor) => (
               <motion.div
                 key={tutor._id}
                 whileHover={{ scale: 1.03 }}
                 className="bg-white dark:bg-slate-900 rounded-2xl shadow-md overflow-hidden"
               >
 
-                {/* IMAGE (NO CROPPING) */}
+                {/* IMAGE */}
                 <div className="h-52 flex items-center justify-center bg-gray-100 dark:bg-slate-800 p-4">
                   <Image
                     src={tutor.photo}
@@ -77,18 +100,20 @@ export default function HomePage() {
                   </p>
 
                   <p className="text-gray-500">
-                    Fee: ${tutor.hourlyFee}/hr
+                    Fee:   ৳{tutor.hourlyFee}/hr
                   </p>
 
                   <p className="text-gray-500">
                     Location: {tutor.location}
                   </p>
 
-                  <Link href={`/tutors/${tutor._id}`}>
-                    <button className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">
-                      Book Session
-                    </button>
-                  </Link>
+                  {/* ✅ LOGIN PROTECTED BUTTON */}
+                  <button
+                    onClick={() => handleBookSession(tutor._id)}
+                    className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg"
+                  >
+                    Book Session
+                  </button>
 
                 </div>
               </motion.div>
@@ -150,62 +175,40 @@ export default function HomePage() {
         </div>
       </section>
 
-     {/* ================= ABOUT US ================= */}
-<section className="py-20 max-w-7xl mx-auto px-4">
+      {/* ================= ABOUT US ================= */}
+      <section className="py-20 max-w-7xl mx-auto px-4">
 
-  <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
 
-    {/* IMAGE SIDE */}
-    <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-lg">
-      <Image
-        src="/assets/p6.jpg"
-        alt="About EduQueue"
-        fill
-        className="object-cover"
-      />
-    </div>
+          <div className="relative w-full h-[400px] rounded-2xl overflow-hidden shadow-lg">
+            <Image
+              src="/assets/p6.jpg"
+              alt="About EduQueue"
+              fill
+              className="object-cover"
+            />
+          </div>
 
-    {/* TEXT SIDE */}
-    <div>
+          <div>
 
-      <h2 className="text-3xl font-bold text-green-600 mb-4">
-        About EduQueue
-      </h2>
+            <h2 className="text-3xl font-bold text-green-600 mb-4">
+              About EduQueue
+            </h2>
 
-      <p className="text-gray-600 dark:text-gray-300 leading-7">
-        EduQueue is a smart tutor booking platform designed to connect students
-        with qualified tutors in the fastest and most efficient way.
-      </p>
+            <p className="text-gray-600 dark:text-gray-300 leading-7">
+              EduQueue is a smart tutor booking platform designed to connect students
+              with qualified tutors in the fastest and most efficient way.
+            </p>
 
-      <p className="text-gray-600 dark:text-gray-300 mt-4 leading-7">
-        We remove the hassle of manual scheduling, avoid time conflicts, and
-        provide a smooth learning experience for students and tutors.
-      </p>
+            <p className="text-gray-600 dark:text-gray-300 mt-4 leading-7">
+              We remove the hassle of manual scheduling and provide a smooth learning experience.
+            </p>
 
-      {/* STATS */}
-      <div className="grid grid-cols-2 gap-4 mt-6">
+          </div>
 
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-xl shadow text-center">
-          <h3 className="text-2xl font-bold text-green-600">1000+</h3>
-          <p className="text-gray-500">Students</p>
         </div>
 
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-xl shadow text-center">
-          <h3 className="text-2xl font-bold text-green-600">200+</h3>
-          <p className="text-gray-500">Tutors</p>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-      
-
-     
+      </section>
 
       {/* ================= TESTIMONIALS ================= */}
       <section className="py-20 max-w-7xl mx-auto px-4">

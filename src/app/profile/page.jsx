@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function ProfilePage() {
+    useEffect(() => {
+      document.title = "Profile | EduQueue";
+    }, []);
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;

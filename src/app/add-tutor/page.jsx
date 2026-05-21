@@ -3,8 +3,12 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import { useEffect } from "react";
 
 export default function AddTutorPage() {
+    useEffect(() => {
+      document.title = "Add Tutor | EduQueue";
+    }, []);
   const { data: session } = authClient.useSession();
   const user = session?.user;
 

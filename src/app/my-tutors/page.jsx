@@ -6,6 +6,9 @@ import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
 export default function MyTutorsPage() {
+    useEffect(() => {
+      document.title = "My Tutors | EduQueue";
+    }, []);
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
