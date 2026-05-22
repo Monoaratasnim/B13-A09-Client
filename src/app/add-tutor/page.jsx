@@ -93,7 +93,7 @@ export default function AddTutorPage() {
             name="tutorName"
             placeholder="Tutor Name"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* PHOTO */}
@@ -102,14 +102,14 @@ export default function AddTutorPage() {
             name="photo"
             placeholder="Photo URL"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* SUBJECT */}
           <select
             name="subject"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 bg-green-200 dark:bg-slate-800"
           >
             <option value="">Select Subject</option>
             <option value="Mathematics">Mathematics</option>
@@ -117,6 +117,7 @@ export default function AddTutorPage() {
             <option value="Chemistry">Chemistry</option>
             <option value="English">English</option>
             <option value="ICT">ICT</option>
+            
           </select>
 
           {/* AVAILABILITY */}
@@ -125,7 +126,7 @@ export default function AddTutorPage() {
             name="availability"
             placeholder="Sun - Thu 5:00 PM - 8:00 PM"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* HOURLY FEE */}
@@ -134,7 +135,7 @@ export default function AddTutorPage() {
             name="hourlyFee"
             placeholder="Hourly Fee"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* TOTAL SLOT */}
@@ -143,7 +144,7 @@ export default function AddTutorPage() {
             name="totalSlot"
             placeholder="Total Slot"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* SESSION START DATE */}
@@ -151,7 +152,7 @@ export default function AddTutorPage() {
             type="date"
             name="sessionStartDate"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* INSTITUTION */}
@@ -160,7 +161,7 @@ export default function AddTutorPage() {
             name="institution"
             placeholder="Institution"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* LOCATION */}
@@ -169,14 +170,14 @@ export default function AddTutorPage() {
             name="location"
             placeholder="Location"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           />
 
           {/* TEACHING MODE */}
           <select
             name="teachingMode"
             required
-            className="w-full border rounded-xl px-4 py-3"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           >
             <option value="">Select Mode</option>
             <option value="Online">Online</option>

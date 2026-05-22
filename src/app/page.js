@@ -130,9 +130,9 @@ export default function HomePage() {
           Popular Subjects
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
 
-          {["Math", "Physics", "Chemistry", "ICT", "English", "Biology", "Programming", "Accounting"].map((s, i) => (
+          {["Math", "Physics", "Chemistry", "ICT", "English", "Biology"].map((s, i) => (
             <div
               key={i}
               className="bg-white dark:bg-slate-900 p-6 text-center rounded-xl shadow hover:shadow-lg hover:scale-105 transition"
