@@ -109,7 +109,7 @@ export default function AddTutorPage() {
           <select
             name="subject"
             required
-            className="w-full border rounded-xl px-4 py-3 bg-green-200 dark:bg-slate-800"
+            className="w-full border rounded-xl px-4 py-3 dark:bg-slate-800"
           >
             <option value="">Select Subject</option>
             <option value="Mathematics">Mathematics</option>
