@@ -46,7 +46,7 @@ export default function Banner() {
     <section className="relative w-full overflow-hidden">
 
       {/* ✅ RESPONSIVE HEIGHT FIX */}
-      <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[85vh]">
+      <div className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] lg:h-[90vh]">
 
         {/* SLIDES */}
         {slides.map((slide, i) => (
@@ -157,7 +157,7 @@ export default function Banner() {
               onClick={() => setIndex(i)}
               className={`transition rounded-full ${
                 i === index
-                  ? "bg-green-500 w-3 h-3 sm:w-3.5 sm:h-3.5 scale-125"
+                  ? "bg-green-500 w-3 h-3 sm:w-2 sm:h-2 scale-125"
                   : "bg-white/50 w-2.5 h-2.5 sm:w-3 sm:h-3"
               }`}
             />

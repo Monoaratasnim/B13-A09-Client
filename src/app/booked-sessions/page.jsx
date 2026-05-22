@@ -6,14 +6,18 @@ import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
 export default function MyBookingsPage() {
-    useEffect(() => {
-      document.title = "My Bookings | EduQueue";
-    }, []);
+  useEffect(() => {
+    document.title = "My Booked Sessions | EduQueue";
+  }, []);
+
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // MODAL STATE
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   /* ================= FETCH BOOKINGS ================= */
   const fetchBookings = async () => {
@@ -25,7 +29,8 @@ export default function MyBookingsPage() {
       );
 
       setBookings(res.data);
-    } catch {
+    } catch (err) {
+      console.log(err);
       toast.error("Failed to load bookings");
     } finally {
       setLoading(false);
@@ -33,21 +38,33 @@ export default function MyBookingsPage() {
   };
 
   useEffect(() => {
-    if (user?.email) fetchBookings();
+    if (user?.email) {
+      fetchBookings();
+    }
   }, [user?.email]);
 
   /* ================= CANCEL BOOKING ================= */
-  const cancelBooking = async (id) => {
+  const handleCancelBooking = async () => {
     try {
       const res = await axios.patch(
-        `http://localhost:5000/booking/cancel/${id}`
+        `http://localhost:5000/booking/cancel/${selectedBooking._id}`
       );
 
       if (res.data.modifiedCount > 0) {
-        toast.success("Booking cancelled");
-        fetchBookings();
+        toast.success("Booking cancelled successfully");
+
+        setBookings((prev) =>
+          prev.map((booking) =>
+            booking._id === selectedBooking._id
+              ? { ...booking, bookStatus: "Cancelled" }
+              : booking
+          )
+        );
+
+        setSelectedBooking(null);
       }
-    } catch {
+    } catch (err) {
+      console.log(err);
       toast.error("Cancel failed");
     }
   };
@@ -55,73 +72,298 @@ export default function MyBookingsPage() {
   /* ================= LOADING ================= */
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-green-600">
-        Loading bookings...
+      <div className="min-h-screen flex items-center justify-center bg-green-50 dark:bg-slate-950 px-4">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+
+          <p className="mt-4 text-green-600 dark:text-green-400 font-semibold text-sm sm:text-base">
+            Loading bookings...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-slate-950 p-4 md:p-8">
+    <div className="min-h-screen bg-green-50 dark:bg-slate-950 px-3 sm:px-5 md:px-8 py-6 sm:py-8">
 
-      <h1 className="text-3xl font-bold text-center mb-8 text-green-600">
-        My Booked Sessions
-      </h1>
+      {/* HEADER */}
+      <div className="text-center mb-6 sm:mb-10">
 
-      {/* EMPTY */}
-      {bookings.length === 0 ? (
-        <p className="text-center text-gray-500">
-          No bookings found
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400">
+          My Booked Sessions
+        </h1>
+
+        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-2 max-w-2xl mx-auto">
+          View and manage all your booked tutor sessions
         </p>
+
+      </div>
+
+      {/* EMPTY STATE */}
+      {bookings.length === 0 ? (
+        <div className="max-w-xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-xl p-6 sm:p-10 text-center border border-green-200 dark:border-green-900">
+
+          <div className="text-5xl sm:text-6xl mb-4">
+            📚
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
+            No Bookings Yet
+          </h2>
+
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">
+            You haven’t booked any tutor sessions yet.
+          </p>
+
+        </div>
       ) : (
-        <div className="overflow-x-auto max-w-6xl mx-auto">
-          <table className="w-full bg-white dark:bg-slate-900 rounded-xl shadow">
+        <>
+          {/* ================= MOBILE CARD VIEW ================= */}
+          <div className="grid grid-cols-1 gap-4 md:hidden">
 
-            <thead className="bg-green-600 text-white">
-              <tr>
-                <th className="p-3 text-left">Tutor</th>
-                <th className="text-left">Student</th>
-                <th className="text-left">Email</th>
-                <th className="text-left">Status</th>
-                <th className="text-center">Action</th>
-              </tr>
-            </thead>
+            {bookings.map((booking) => (
+              <div
+                key={booking._id}
+                className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-green-200 dark:border-green-900 p-5"
+              >
 
-            <tbody>
-              {bookings.map((b) => (
-                <tr key={b._id} className="border-b">
+                <div className="space-y-3">
 
-                  <td className="p-3">{b.tutorName}</td>
-                  <td>{b.studentName}</td>
-                  <td>{b.studentEmail}</td>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Tutor Name
+                    </p>
 
-                  <td>
+                    <h2 className="text-lg font-bold text-gray-800 dark:text-white">
+                      {booking.tutorName}
+                    </h2>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Student Name
+                    </p>
+
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      {booking.studentName}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Email
+                    </p>
+
+                    <p className="text-sm break-all text-gray-700 dark:text-gray-300">
+                      {booking.studentEmail}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2">
+
                     <span
-                      className={
-                        b.bookStatus === "Cancelled"
-                          ? "text-red-500"
-                          : "text-green-600"
-                      }
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        booking.bookStatus === "Cancelled"
+                          ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                          : "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                      }`}
                     >
-                      {b.bookStatus}
+                      {booking.bookStatus}
                     </span>
-                  </td>
 
-                  <td className="text-center">
                     <button
-                      disabled={b.bookStatus === "Cancelled"}
-                      onClick={() => cancelBooking(b._id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded disabled:opacity-50"
+                      disabled={booking.bookStatus === "Cancelled"}
+                      onClick={() => setSelectedBooking(booking)}
+                      className="
+                        bg-red-500 hover:bg-red-600
+                        text-white
+                        px-4 py-2
+                        rounded-lg
+                        text-sm
+                        font-medium
+                        transition
+                        disabled:opacity-50
+                        disabled:cursor-not-allowed
+                      "
                     >
                       Cancel
                     </button>
-                  </td>
 
-                </tr>
-              ))}
-            </tbody>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
-          </table>
+          {/* ================= TABLE VIEW ================= */}
+          <div className="hidden md:block max-w-7xl mx-auto overflow-x-auto">
+
+            <div className="bg-green-50 dark:bg-slate-900 rounded-3xl shadow-2xl border border-green-200 dark:border-green-900 overflow-hidden">
+
+              <table className="w-full">
+
+                {/* TABLE HEAD */}
+                <thead className="bg-green-600 text-white">
+                  <tr>
+
+                    <th className="px-6 lg:px-8 py-4 text-left font-semibold text-sm lg:text-base">
+                      Tutor Name
+                    </th>
+
+                    <th className="px-6 lg:px-8 py-4 text-left font-semibold text-sm lg:text-base">
+                      Student Name
+                    </th>
+
+                    <th className="px-6 lg:px-8 py-4 text-left font-semibold text-sm lg:text-base">
+                      Email
+                    </th>
+
+                    <th className="px-6 lg:px-8 py-4 text-left font-semibold text-sm lg:text-base">
+                      Status
+                    </th>
+
+                    <th className="px-6 lg:px-8 py-4 text-center font-semibold text-sm lg:text-base">
+                      Action
+                    </th>
+
+                  </tr>
+                </thead>
+
+                {/* TABLE BODY */}
+                <tbody>
+
+                  {bookings.map((booking, index) => (
+                    <tr
+                      key={booking._id}
+                      className={`
+                        border-b border-green-100 dark:border-green-700 shadow-sm
+                        hover:bg-green-100/70 dark:hover:bg-green-900/20
+                        transition
+                        ${
+                          index % 2 === 0
+                            ? "bg-green-50/40 dark:bg-green-300"
+                            : "bg-green-100/40 dark:bg-green-200"
+                        }
+                      `}
+                    >
+
+                      {/* TUTOR */}
+                      <td className="px-6 lg:px-8 py-5 font-semibold text-gray-800 dark:text-white">
+                        {booking.tutorName}
+                      </td>
+
+                      {/* STUDENT */}
+                      <td className="px-6 lg:px-8 py-5 text-slate-700 dark:text-slate-300">
+                        {booking.studentName}
+                      </td>
+
+                      {/* EMAIL */}
+                      <td className="px-6 lg:px-8 py-5 text-slate-700 dark:text-slate-300">
+                        {booking.studentEmail}
+                      </td>
+
+                      {/* STATUS */}
+                      <td className="px-6 lg:px-8 py-5">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            booking.bookStatus === "Cancelled"
+                              ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                              : "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                          }`}
+                        >
+                          {booking.bookStatus}
+                        </span>
+                      </td>
+
+                      {/* ACTION */}
+                      <td className="px-6 lg:px-8 py-5 text-center">
+
+                        <button
+                          disabled={booking.bookStatus === "Cancelled"}
+                          onClick={() => setSelectedBooking(booking)}
+                          className="
+                            bg-red-500 hover:bg-red-600
+                            text-white
+                            px-4 py-2
+                            rounded-lg
+                            text-sm
+                            font-medium
+                            transition
+                            disabled:opacity-50
+                            disabled:cursor-not-allowed
+                          "
+                        >
+                          Cancel
+                        </button>
+
+                      </td>
+                    </tr>
+                  ))}
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ================= CONFIRM MODAL ================= */}
+      {selectedBooking && (
+        <div className="fixed inset-0 z-45 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-5 sm:p-6 border border-green-200 dark:border-green-900">
+
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">
+              Cancel Booking?
+            </h2>
+
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">
+              Are you sure you want to cancel your booking with{" "}
+              <span className="font-semibold text-red-500">
+                {selectedBooking.tutorName}
+              </span>
+              ?
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
+
+              <button
+                onClick={() => setSelectedBooking(null)}
+                className="
+                  w-full sm:w-auto
+                  px-4 py-2.5
+                  rounded-xl
+                  border
+                  border-gray-300
+                  dark:border-slate-700
+                  text-gray-700
+                  dark:text-gray-300
+                  hover:bg-gray-100
+                  dark:hover:bg-slate-800
+                  transition
+                "
+              >
+                Keep Booking
+              </button>
+
+              <button
+                onClick={handleCancelBooking}
+                className="
+                  w-full sm:w-auto
+                  px-4 py-2.5
+                  rounded-xl
+                  bg-red-500
+                  hover:bg-red-600
+                  text-white
+                  transition
+                "
+              >
+                Yes, Cancel
+              </button>
+
+            </div>
+          </div>
         </div>
       )}
     </div>
