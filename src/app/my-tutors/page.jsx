@@ -29,7 +29,7 @@ export default function MyTutorsPage() {
            console.log(tokenData)
      
       const res = await axios.get(
-        `http://localhost:5000/my-tutors/${user?.email}`,{
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/my-tutors/${user?.email}`,{
           headers: {
             authorization: `Bearer ${tokenData?.token}`
           }
@@ -69,7 +69,7 @@ export default function MyTutorsPage() {
       console.log(tokenData)
     try {
       const res = await axios.patch(
-        `http://localhost:5000/tutor/${editTutor._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/tutor/${editTutor._id}`,
         updatedTutor, {
           headers: {
             authorization: `Bearer ${tokenData?.token}`
@@ -102,7 +102,7 @@ export default function MyTutorsPage() {
            console.log(tokenData)
     try {
       const res = await axios.delete(
-        `http://localhost:5000/tutor/${deleteTutor._id}`, {
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/tutor/${deleteTutor._id}`, {
           headers: {
             authorization: `Bearer ${tokenData?.token}`
           }

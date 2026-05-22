@@ -58,7 +58,7 @@ export default function TutorsPage() {
     try {
       setLoading(true);
 
-      const res = await axios.get("http://localhost:5000/tutor", {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/tutor`, {
         params: {
           search,
           startDate,

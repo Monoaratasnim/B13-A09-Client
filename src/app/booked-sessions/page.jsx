@@ -28,7 +28,7 @@ export default function MyBookingsPage() {
            console.log(tokenData)
      
       const res = await axios.get(
-        `http://localhost:5000/bookings/email/${user?.email}`, {
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/email/${user?.email}`, {
           headers: {
             authorization: `Bearer ${tokenData?.token}`
           }
@@ -52,15 +52,17 @@ export default function MyBookingsPage() {
 
   /* ================= CANCEL BOOKING ================= */
   const handleCancelBooking = async () => {
-      const {data:tokenData} = await authClient.token()
+    const {data:tokenData} = await authClient.token()
     try {
-      const res = await axios.patch(
-        `http://localhost:5000/booking/cancel/${selectedBooking._id}`, {
-          headers: {
-            authorization: `Bearer ${tokenData?.token}`
-          }
-        }
-      );
+    const res = await axios.patch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/booking/cancel/${selectedBooking._id}`,
+  {}, // body
+  {
+    headers: {
+      authorization: `Bearer ${tokenData?.token}`,
+    },
+  }
+);
 
       if (res.data.modifiedCount > 0) {
         toast.success("Booking cancelled successfully");

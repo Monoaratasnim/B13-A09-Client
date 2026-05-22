@@ -46,7 +46,7 @@ export default function AddTutorPage() {
     
     try {
       const res = await axios.post(
-        "http://localhost:5000/tutor",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/tutor`,
         tutorData,
         {
           headers: {

@@ -25,7 +25,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/tutor");
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/tutor`);
         setTutors(res.data.slice(0, 6));
       } catch (error) {
         console.log(error);

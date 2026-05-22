@@ -32,7 +32,7 @@ export default function TutorDetailsPage() {
       console.log(tokenData)
 
       const res = await axios.get(
-        `http://localhost:5000/tutor/${params.id}` , {
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/tutor/${params.id}` , {
           headers: {
             authorization: `Bearer ${tokenData?.token}`
           }
@@ -80,7 +80,7 @@ export default function TutorDetailsPage() {
       console.log(tokenData)
     try {
       const res = await axios.post(
-        "http://localhost:5000/bookings",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/bookings`,
         bookingData, {
           headers: {
             authorization: `Bearer ${tokenData?.token}`
