@@ -185,7 +185,8 @@ export default function HomePage() {
               src="/assets/p6.jpg"
               alt="About EduQueue"
               fill
-              className="object-cover"
+              sizes="( max-width: 768px ) 100vw, ( max-width: 1200px ) 50vw, 33vw"
+              className="object-cover" 
             />
           </div>
 
