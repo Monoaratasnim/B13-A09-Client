@@ -40,11 +40,19 @@ export default function AddTutorPage() {
 
       createdAt: new Date(),
     };
-
+   
+     const {data:tokenData} = await authClient.token()
+          console.log(tokenData)
+    
     try {
       const res = await axios.post(
         "http://localhost:5000/tutor",
-        tutorData
+        tutorData,
+        {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       if (res.data.insertedId) {

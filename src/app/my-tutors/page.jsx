@@ -25,8 +25,15 @@ export default function MyTutorsPage() {
     try {
       setLoading(true);
 
+ const {data:tokenData} = await authClient.token()
+           console.log(tokenData)
+     
       const res = await axios.get(
-        `http://localhost:5000/my-tutors/${user?.email}`
+        `http://localhost:5000/my-tutors/${user?.email}`,{
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       setTutors(res.data);
@@ -56,11 +63,18 @@ export default function MyTutorsPage() {
       hourlyFee: Number(form.hourlyFee.value),
       location: form.location.value,
     };
+     
 
+     const {data:tokenData} = await authClient.token()
+      console.log(tokenData)
     try {
       const res = await axios.patch(
         `http://localhost:5000/tutor/${editTutor._id}`,
-        updatedTutor
+        updatedTutor, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       if (res.data.modifiedCount > 0) {
@@ -84,9 +98,15 @@ export default function MyTutorsPage() {
 
   /* ================= DELETE TUTOR ================= */
   const handleDelete = async () => {
+     const {data:tokenData} = await authClient.token()
+           console.log(tokenData)
     try {
       const res = await axios.delete(
-        `http://localhost:5000/tutor/${deleteTutor._id}`
+        `http://localhost:5000/tutor/${deleteTutor._id}`, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       if (res.data.deletedCount > 0) {

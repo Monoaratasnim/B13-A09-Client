@@ -24,8 +24,15 @@ export default function MyBookingsPage() {
     try {
       setLoading(true);
 
+      const {data:tokenData} = await authClient.token()
+           console.log(tokenData)
+     
       const res = await axios.get(
-        `http://localhost:5000/bookings/email/${user?.email}`
+        `http://localhost:5000/bookings/email/${user?.email}`, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       setBookings(res.data);
@@ -45,9 +52,14 @@ export default function MyBookingsPage() {
 
   /* ================= CANCEL BOOKING ================= */
   const handleCancelBooking = async () => {
+      const {data:tokenData} = await authClient.token()
     try {
       const res = await axios.patch(
-        `http://localhost:5000/booking/cancel/${selectedBooking._id}`
+        `http://localhost:5000/booking/cancel/${selectedBooking._id}`, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       if (res.data.modifiedCount > 0) {
@@ -249,17 +261,17 @@ export default function MyBookingsPage() {
                     >
 
                       {/* TUTOR */}
-                      <td className="px-6 lg:px-8 py-5 font-semibold text-gray-800 dark:text-white">
+                      <td className="px-6 lg:px-8 py-5 font-semibold text-gray-800 dark:text-green-800">
                         {booking.tutorName}
                       </td>
 
                       {/* STUDENT */}
-                      <td className="px-6 lg:px-8 py-5 text-slate-700 dark:text-slate-300">
+                      <td className="px-6 lg:px-8 py-5 text-slate-700 dark:text-green-800">
                         {booking.studentName}
                       </td>
 
                       {/* EMAIL */}
-                      <td className="px-6 lg:px-8 py-5 text-slate-700 dark:text-slate-300">
+                      <td className="px-6 lg:px-8 py-5 text-slate-700 dark:text-green-800">
                         {booking.studentEmail}
                       </td>
 
@@ -269,7 +281,7 @@ export default function MyBookingsPage() {
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
                             booking.bookStatus === "Cancelled"
                               ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
-                              : "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                              : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-800"
                           }`}
                         >
                           {booking.bookStatus}

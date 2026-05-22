@@ -28,8 +28,15 @@ export default function TutorDetailsPage() {
     try {
       setLoading(true);
 
+      const {data:tokenData} = await authClient.token()
+      console.log(tokenData)
+
       const res = await axios.get(
-        `http://localhost:5000/tutor/${params.id}`
+        `http://localhost:5000/tutor/${params.id}` , {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       setTutor(res.data);
@@ -68,10 +75,17 @@ export default function TutorDetailsPage() {
       bookedAt: new Date(),
     };
 
+
+      const {data:tokenData} = await authClient.token()
+      console.log(tokenData)
     try {
       const res = await axios.post(
         "http://localhost:5000/bookings",
-        bookingData
+        bookingData, {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`
+          }
+        }
       );
 
       if (res.data.insertedId) {
