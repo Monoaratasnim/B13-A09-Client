@@ -14,7 +14,7 @@ This project was developed using **Next.js**, **Express.js**, **MongoDB**, and *
 ## 🚀 Features
 
 * 🔐 Secure user authentication using JWT
-* 👨‍🏫 Browse available tutors by subject and schedule
+* 👨‍🏫 Browse available tutors by Name and Date
 * 📅 Book online tutor sessions with preferred time slots
 * 🎟️ Generate digital session tokens for each booking
 * ⚡ Prevent duplicate or conflicting bookings automatically
