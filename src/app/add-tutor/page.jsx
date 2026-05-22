@@ -115,6 +115,7 @@ export default function AddTutorPage() {
             <option value="Mathematics">Mathematics</option>
             <option value="Physics">Physics</option>
             <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
             <option value="English">English</option>
             <option value="ICT">ICT</option>
             
