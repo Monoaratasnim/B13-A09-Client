@@ -20,57 +20,24 @@ export default function TutorsPage() {
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-  // FORMAT DATE
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-
-    const day = date.getDate();
-
-    const getOrdinal = (n) => {
-      if (n > 3 && n < 21) return "th";
-
-      switch (n % 10) {
-        case 1:
-          return "st";
-        case 2:
-          return "nd";
-        case 3:
-          return "rd";
-        default:
-          return "th";
-      }
-    };
-
-    const month = date.toLocaleString("default", {
-      month: "long",
-    });
-
-    const year = date.getFullYear();
-
-    return `${day}${getOrdinal(day)} ${month} ${year}`;
-  };
 
   // FETCH TUTORS
   const fetchTutors = async () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/tutor`, {
-        params: {
-          search,
-          startDate,
-          endDate,
-        },
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/tutor`,
+        {
+          params: {
+            search,
+          },
+        }
+      );
 
       setTutors(res.data);
-
     } catch (err) {
       console.log(err);
-
     } finally {
       setLoading(false);
     }
@@ -81,15 +48,14 @@ export default function TutorsPage() {
     fetchTutors();
   }, []);
 
-  // SEARCH + FILTER
+  // SEARCH (debounce)
   useEffect(() => {
     const delay = setTimeout(() => {
       fetchTutors();
     }, 500);
 
     return () => clearTimeout(delay);
-
-  }, [search, startDate, endDate]);
+  }, [search]);
 
   // OPEN DETAILS
   const handleOpenTutor = (id) => {
@@ -125,49 +91,24 @@ export default function TutorsPage() {
         </p>
       </div>
 
-      {/* FILTER BOX */}
+      {/* SEARCH BOX */}
       <div className="max-w-6xl mx-auto bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-xl border dark:border-slate-800 mb-10">
-
-        <div className="grid md:grid-cols-3 gap-4">
-
-          {/* SEARCH */}
-          <input
-            type="text"
-            placeholder="Search tutor name..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 rounded-xl border dark:bg-slate-800 dark:border-slate-700"
-          />
-
-          {/* START DATE */}
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full p-3 rounded-xl border dark:bg-slate-800 dark:border-slate-700"
-          />
-
-          {/* END DATE */}
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-full p-3 rounded-xl border dark:bg-slate-800 dark:border-slate-700"
-          />
-
-        </div>
+        <input
+          type="text"
+          placeholder="Search tutor name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full p-3 rounded-xl border dark:bg-slate-800 dark:border-slate-700"
+        />
       </div>
 
-      {/* TUTORS GRID */}
+      {/* GRID */}
       <div className="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
-
         {tutors.map((tutor) => (
           <div
             key={tutor._id}
             className="bg-white dark:bg-slate-900 rounded-2xl shadow-md hover:shadow-2xl transition border dark:border-slate-800 hover:-translate-y-2"
           >
-
-            {/* IMAGE */}
             <div className="h-60 flex items-center justify-center bg-gray-100 dark:bg-slate-800 p-4">
               <img
                 src={tutor.photo}
@@ -176,9 +117,7 @@ export default function TutorsPage() {
               />
             </div>
 
-            {/* CONTENT */}
             <div className="p-5 space-y-2">
-
               <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                 {tutor.tutorName}
               </h2>
@@ -195,27 +134,18 @@ export default function TutorsPage() {
                 📍 {tutor.location}
               </p>
 
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                📅{" "}
-                {tutor.sessionStartDate
-                  ? formatDate(tutor.sessionStartDate)
-                  : "Not set"}
-              </p>
-
               <div className="pt-2">
                 <p className="text-lg font-bold text-green-600 dark:text-green-400">
                   ৳ {tutor.hourlyFee}/hr
                 </p>
               </div>
 
-              {/* BUTTON */}
               <button
                 onClick={() => handleOpenTutor(tutor._id)}
                 className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-xl font-semibold transition"
               >
                 Book Session
               </button>
-
             </div>
           </div>
         ))}
@@ -227,9 +157,8 @@ export default function TutorsPage() {
           <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200">
             No Tutors Found
           </h2>
-
           <p className="text-gray-500 dark:text-gray-400 mt-2">
-            Try changing search or filters
+            Try changing search
           </p>
         </div>
       )}
