@@ -12,7 +12,6 @@ export default function TutorsPage() {
   }, []);
 
   const router = useRouter();
-
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
@@ -20,9 +19,10 @@ export default function TutorsPage() {
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
+  const [query, setQuery] = useState(""); // actual API query
 
   // FETCH TUTORS
-  const fetchTutors = async () => {
+  const fetchTutors = async (searchValue = "") => {
     try {
       setLoading(true);
 
@@ -30,7 +30,7 @@ export default function TutorsPage() {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/tutor`,
         {
           params: {
-            search,
+            search: searchValue,
           },
         }
       );
@@ -43,32 +43,33 @@ export default function TutorsPage() {
     }
   };
 
-  // INITIAL FETCH
+  // INITIAL LOAD
   useEffect(() => {
-    fetchTutors();
+    fetchTutors("");
   }, []);
 
-  // SEARCH (debounce)
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      fetchTutors();
-    }, 500);
+  // SEARCH HANDLER (BUTTON / ENTER)
+  const handleSearch = () => {
+    setQuery(search);
+    fetchTutors(search);
+  };
 
-    return () => clearTimeout(delay);
-  }, [search]);
+  // ENTER KEY SUPPORT
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
-  // OPEN DETAILS
   const handleOpenTutor = (id) => {
     if (!user) {
       toast.error("Please login first");
       router.push("/login");
       return;
     }
-
     router.push(`/tutors/${id}`);
   };
 
-  // LOADING
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[60vh] text-green-600 dark:text-green-400 bg-gray-100 dark:bg-slate-950 font-semibold">
@@ -91,15 +92,31 @@ export default function TutorsPage() {
         </p>
       </div>
 
-      {/* SEARCH BOX */}
-      <div className="max-w-6xl mx-auto bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-xl border dark:border-slate-800 mb-10">
-        <input
-          type="text"
-          placeholder="Search tutor name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 rounded-xl border dark:bg-slate-800 dark:border-slate-700"
-        />
+      {/* SEARCH BOX (PROFESSIONAL) */}
+      <div className="max-w-3xl mx-auto mb-10">
+        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-slate-900 p-3 rounded-2xl shadow-xl border dark:border-slate-800">
+
+          <input
+            type="text"
+            placeholder="Search tutor by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 p-3 rounded-xl border dark:bg-slate-800 dark:border-slate-700 outline-none focus:ring-2 focus:ring-green-500"
+          />
+
+          <button
+            onClick={handleSearch}
+            className="px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition w-full sm:w-auto"
+          >
+            Search
+          </button>
+        </div>
+
+        {/* optional hint */}
+        <p className="text-xs text-gray-500 mt-2 text-center">
+          Press Enter or click Search to filter tutors
+        </p>
       </div>
 
       {/* GRID */}
@@ -158,7 +175,7 @@ export default function TutorsPage() {
             No Tutors Found
           </h2>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
-            Try changing search
+            Try a different search term
           </p>
         </div>
       )}
